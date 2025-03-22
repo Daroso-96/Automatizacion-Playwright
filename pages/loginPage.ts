@@ -22,6 +22,7 @@ export class LoginPage {
     }
 
     async isLoginFailed() {
-        return this.page.url() === 'https://www.saucedemo.com/';
+        await this.page.waitForLoadState('domcontentloaded'); 
+        return !(this.page.url().includes("/inventory.html"));
     }
 }
