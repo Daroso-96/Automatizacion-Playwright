@@ -1,38 +1,31 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 
-test.describe('Login en sauceDemo', () => {
+test.describe('Login Tests', () => {
+    
+    test('Login exitoso con credenciales correctas', async ({ page }) => {
+        const loginPage = new LoginPage(page);
 
+        await loginPage.goToLoginPage();
+        await loginPage.login(process.env.USER_NAME || '', process.env.PASSWORD || '');
 
-test('Login exitoso con usuario valido', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-        
-  await loginPage.goToLoginPage();
-  await loginPage.login('standard_user', 'secret_sauce');
+        await expect(page).toHaveURL(/inventory.html/);
+    });
 
-  expect(await loginPage.isLoginSuccessful()).toBeTruthy();
-  
-});
+    test('Login fallido con credenciales incorrectas', async ({ page }) => {
+        const loginPage = new LoginPage(page);
 
-test('Login fallido con usuario incorrecto', async ({page}) =>{
-  const loginPage = new LoginPage(page);
-        
-  await loginPage.goToLoginPage();
-  await loginPage.login('standard_user', 'password_falsa');
-  const errorMessage = await loginPage.getErrorMessage();
-  await expect(errorMessage).toBeVisible();
-  await expect(errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
-  const loginFailed = await loginPage.isLoginFailed();
-  expect(loginFailed).toBeTruthy();
-  /*
-  await page.goto('https://www.saucedemo.com/');
-  
-  await page.fill('#user-name', 'standard_user');
-  await page.fill('#password', 'password_errada');
-  await page.click('#login-button');
+        await loginPage.goToLoginPage();
+        await loginPage.login(process.env.FAKE_USER || '', process.env.FAKE_PASSWORD || '');
 
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
-  await expect(page.locator('[data-test="error"]')).toHaveText('Epic sadface: Username and password do not match any user in this service');*/
-})
+        // ✅ Validar que el mensaje de error es visible
+        const errorMessage = await loginPage.getErrorMessage();
+        await expect(errorMessage).toBeVisible();
+        await expect(errorMessage).toHaveText('Epic sadface: Username and password do not match any user in this service');
+
+        // ✅ Validar que el usuario sigue en la página de login
+        const loginFailed = await loginPage.isLoginFailed();
+        expect(loginFailed).toBeTruthy();
+    });
 
 });

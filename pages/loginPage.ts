@@ -1,12 +1,13 @@
 import { Page } from '@playwright/test';
-
+import dotenv from 'dotenv';
+dotenv.config();
 export class LoginPage {
     private page:Page;
     constructor(page:Page) {
         this.page  = page;
     }
     async goToLoginPage() {
-        await this.page.goto('https://www.saucedemo.com/');
+        await this.page.goto(process.env.BASE_URL || '');
     }
     async login(username: string, password: string) {
         await this.page.fill('#user-name', username);
