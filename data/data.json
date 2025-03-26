@@ -1,0 +1,21 @@
+[
+    {
+      "firstName": "Sasha",
+      "lastName": "Dog",
+      "zip": "1101"
+      
+    },
+    {
+      "firstName": "Carlos",
+      "lastName": "Gomez",
+      "zip": "1012"
+      
+    },
+    {
+      "firstName": "Ana",
+      "lastName": "Martinez",
+      "zip": "15123"
+      
+    }
+  ]
+  
